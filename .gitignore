@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+*.mp4
+*.mov
+*.wav
+!examples/**/*.wv
+out.json
+*.ar.json

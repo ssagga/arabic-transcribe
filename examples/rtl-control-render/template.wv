@@ -1,0 +1,21 @@
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:700px;overflow:hidden}
+body{position:relative;background:#11151E;font-family:'Cairo',sans-serif}
+.row{position:absolute;right:40px;width:1000px;text-align:right;color:#F4F1EA;font-size:52px;font-weight:700}
+.lbl{position:absolute;left:40px;color:#4C8DFF;font-size:26px;font-family:monospace}
+.w{display:inline-block;margin-left:.28em}
+</style>
+<!-- REFERENCE: one span, engine shapes and orders it natively -->
+<div class="lbl" style="top:60px;z-index:5">A reference: single span</div>
+<div class="row" style="top:110px;direction:rtl;z-index:5"><span>واحد اثنان ثلاثة</span></div>
+
+<!-- B: separate spans, logical order, direction:rtl -->
+<div class="lbl" style="top:250px;z-index:5">B spans logical + rtl</div>
+<div class="row" style="top:300px;direction:rtl;z-index:5"><span class="w">واحد</span> <span class="w">اثنان</span> <span class="w">ثلاثة</span></div>
+
+<!-- C: separate spans, REVERSED order, direction:rtl -->
+<div class="lbl" style="top:440px;z-index:5">C spans reversed + rtl</div>
+<div class="row" style="top:490px;direction:rtl;z-index:5"><span class="w">ثلاثة</span> <span class="w">اثنان</span> <span class="w">واحد</span></div>
