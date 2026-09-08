@@ -72,5 +72,15 @@ export function rtlWordCss(cls, { marginEm = 0.28 } = {}) {
   return `.${cls}{display:inline-block;margin-left:${marginEm}em}`;
 }
 
+/**
+ * STATIC lines (no per-word reveal — a slide, a title). One element holds the whole line,
+ * which the engine orders natively. But a digit or Latin run INLINE inside Arabic renders
+ * reversed AND inverts the words around it. Wrapping that run in its own nested <span>
+ * fixes both; spaces stay outside the span. (examples/mixed-content-control-render, row F)
+ */
+export function staticLine(text) {
+  return esc(text).replace(/[0-9A-Za-z][0-9A-Za-z.\-]*/g, (m) => `<span>${m}</span>`);
+}
+
 /** Google Fonts families that actually carry Arabic glyphs. Latin display faces do not. */
 export const ARABIC_FACES = ['Cairo', 'Noto Kufi Arabic', 'IBM Plex Sans Arabic', 'Tajawal', 'Almarai'];

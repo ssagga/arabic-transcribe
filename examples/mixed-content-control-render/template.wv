@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:900px;overflow:hidden}
+body{position:relative;background:#E8E3D8;font-family:'Tajawal',sans-serif}
+.r{position:absolute;right:44px;direction:rtl;text-align:right;color:#1B211D;font-size:42px;font-weight:500}
+.l{position:absolute;left:44px;color:#8F6A2C;font-size:21px;font-family:monospace;font-weight:700}
+</style>
+<div class="l" style="top:34px">A digits inline   want: 330 الى 400</div>
+<div class="r" style="top:74px">330 إلى 400 سعرة</div>
+<div class="l" style="top:164px">B digits alone in block   want: 330-400</div>
+<div class="r" style="top:204px">330-400</div>
+<div class="l" style="top:294px">C latin inline   want: حسب CDC تقريبا</div>
+<div class="r" style="top:334px">حسب CDC تقريبا</div>
+<div class="l" style="top:424px">D latin alone in block</div>
+<div class="r" style="top:464px">CDC</div>
+<div class="l" style="top:554px">E digits pre-reversed inline</div>
+<div class="r" style="top:594px">033 إلى 004 سعرة</div>
+<div class="l" style="top:684px">F digits in NESTED SPAN  (the fix)</div>
+<div class="r" style="top:724px">تحتاج <span>330</span> سعرة</div>
+<div class="l" style="top:814px">G one number only, inline</div>
+<div class="r" style="top:844px">تحتاج 330 سعرة</div>

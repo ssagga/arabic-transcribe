@@ -37,7 +37,47 @@ RTL box ordering and the reversal should be dropped.
 A single span holding the whole line is always ordered correctly — so if you do not
 need a per-word reveal, do not split the line at all.
 
-## 2. Whitespace between spans collapses
+## 2. Multi-digit Eastern Arabic numerals render backwards
+
+`١٠` renders as `٠١`. `١٢٠` renders as `٠٢١`. The engine lays the digit run out right-to-left
+along with the surrounding Arabic, where the bidi algorithm would normally isolate it.
+
+**`direction: ltr` on the span does not fix it** — the engine ignores `direction` here exactly as
+it ignores it for box order (§1).
+
+Two options, control-rendered:
+
+| Construction | Result |
+|---|---|
+| `١٠` plain in an rtl block | `٠١` — wrong |
+| `١٠` in a `direction:ltr` span | `٠١` — still wrong |
+| `٠١` pre-reversed in the source | `١٠` — correct, but fragile |
+| `10` Western digits | `10` — **correct, no intervention** |
+
+**Use Western digits.** They need no workaround, they survive the engine learning bidi, and they
+are what Saudi and Gulf social content uses anyway. Pre-reversing works today and silently inverts
+every number in your film the day this is fixed.
+
+A single digit (`٥`, `٨`) has nothing to reorder and is safe either way — which is exactly why this
+hides: it looks fine until a number reaches two digits.
+
+**But Western digits are only safe when ALONE in an element.** A second control render
+(`examples/mixed-content-control-render`) found that a number or a Latin word sitting *inline*
+inside Arabic text — `تحتاج 330 سعرة` — renders the digits backwards *and* inverts the words
+around it. The fix is to wrap every non-Arabic run in its own **nested `<span>`**, spaces kept
+outside the span:
+
+| Construction | Result |
+|---|---|
+| `تحتاج 330 سعرة` plain | `033`, words inverted — wrong |
+| `تحتاج <span>330</span> سعرة` | correct digits, correct order |
+| `330-400` alone in a block | correct |
+
+In a per-word animated line each word is already its own span, so this is automatic. In a
+static single-span line — a carousel slide, a title — you must isolate the run yourself.
+`helpers/rtl-spans.mjs` exports `staticLine()` for exactly this.
+
+## 3. Whitespace between spans collapses
 
 Words render jammed together (`الكابشنزتكتبلسه`). The whitespace between
 inline-block spans is dropped. Give each word an explicit margin:
@@ -48,7 +88,7 @@ inline-block spans is dropped. Give each word an explicit margin:
 
 `rtlWordCss()` in the helper emits exactly this.
 
-## 3. Latin display faces have no Arabic glyphs
+## 4. Latin display faces have no Arabic glyphs
 
 Archivo, Inter, Archivo Narrow and most of the faces the stock recipes use carry no
 Arabic at all. On Google Fonts, these do: **Cairo**, **Noto Kufi Arabic**,
@@ -59,7 +99,7 @@ Watch the render log. A warning naming *your* family
 real and means the type identity is gone. Warnings naming generic keywords
 (`'sans-serif'`, `'cursive'`) are harmless noise.
 
-## 4. Keep Latin brand names as one token
+## 5. Keep Latin brand names as one token
 
 `Cohere`, `WhisperX`, `Hugging Face`, `GitHub`, `keep building` — wrap each in
 `[[double brackets]]` so the helper treats it as a single token. Reversing a
@@ -68,7 +108,7 @@ multi-word Latin phrase turns `keep building` into `building keep`.
 Rendering tool names in Latin rather than Arabic transliteration is usually the
 better call anyway: `WhisperX` reads as a product, `ويسبر اكس` reads as phonetics.
 
-## 5. Animation delays on children are absolute
+## 6. Animation delays on children are absolute
 
 Not specific to Arabic, but it will bite you in the same document. `animation-delay`
 on a child element is measured from the **document timeline**, never from when a
@@ -78,7 +118,7 @@ captions late in the film simply never appear.
 
 `probe-qa` catches this one, as `ink 0.00% — no visible caption`.
 
-## 6. Give every line its own window
+## 7. Give every line its own window
 
 A line whose entrance uses `fill-mode: both` or `forwards` stays visible for the
 rest of its cue. Several lines in one beat then pile up on top of each other. Give
@@ -96,11 +136,12 @@ each line a window that ends when the next one starts:
 End the window a frame early — a gate closing exactly on a frame boundary loses
 that frame, and `--verify` cannot see it.
 
-## 7. Numerals are a choice
+## 8. Numerals — which system
 
-`٢٠٢٦` (Eastern Arabic) and `2026` (Western) are both correct in Saudi usage.
-Western digits read as technical specs — good for `18GB`, `2B`, version numbers.
-Eastern digits read as prose. Pick one rule per piece and hold it.
+Both are correct in Saudi usage and it is a real design choice — Western digits read as
+technical specs, Eastern digits read as prose. But see §2: **only Western digits actually render
+correctly** in this engine beyond a single digit. Pick Western unless you have verified otherwise
+on your build.
 
 ---
 

@@ -1,0 +1,20 @@
+<meta charset="utf-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:760px;overflow:hidden}
+body{position:relative;background:#1B211D;font-family:'Tajawal',sans-serif}
+.r{position:absolute;right:40px;direction:rtl;text-align:right;color:#F7F3EB;font-size:54px;font-weight:700}
+.l{position:absolute;left:40px;color:#E0BE7C;font-size:24px;font-family:monospace}
+.w{display:inline-block;margin-left:.26em}
+</style>
+<div class="l" style="top:40px">A plain span in rtl block  (want: 10)</div>
+<div class="r" style="top:80px"><span class="w">١٠</span></div>
+<div class="l" style="top:200px">B direction:ltr on the span</div>
+<div class="r" style="top:240px"><span class="w" style="direction:ltr">١٠</span></div>
+<div class="l" style="top:360px">C characters pre-reversed in source</div>
+<div class="r" style="top:400px"><span class="w">٠١</span></div>
+<div class="l" style="top:520px">D western digits</div>
+<div class="r" style="top:560px"><span class="w">10</span></div>
+<div class="l" style="top:660px">E three digits plain (want: 120)</div>
+<div class="r" style="top:690px"><span class="w">١٢٠</span></div>
